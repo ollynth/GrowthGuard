@@ -41,7 +41,7 @@ router.get('/daily/:field', async (req, res) => {
 // GET /data/temperature
 router.get('/temperature', async (req, res) => {
     try {
-        const data = await queryFieldDaily('temperature');
+        const data = await queryField('temperature');
         res.json(data);
     } catch (error) {
         console.error('Error fetching temp data:', error);

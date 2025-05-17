@@ -1,0 +1,41 @@
+/* src/pages/Dashboard.css */
+.main-container {
+  background-color: #F5ECD5;
+  color: #6b7280; 
+}
+
+.data-container {
+  align-items: center;
+  padding: 16px;
+}
+
+.label {
+  font-size: 2rem;
+  color: #626F47;
+  margin-bottom: 8px;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 16px; 
+}
+
+/* Responsive Design: Switch to one column on smaller screens */
+@media (max-width: 768px) {
+  .card-grid {
+    grid-template-columns: 1fr; /* One column */
+  }
+}
+
+.chart-container {
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 1rem;
+}
+
+.chart-title {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+}

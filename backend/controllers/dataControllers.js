@@ -25,7 +25,7 @@ async function queryFieldLatest() {
     const query = `
         SELECT  *
         FROM "plant_metrics" 
-        WHERE time >= now() - interval '2 day'
+        WHERE time >= now() - interval '1 day'
         ORDER BY time DESC 
         LIMIT 1
     `;
@@ -74,6 +74,7 @@ async function queryFieldDaily(field) {
     }
 }
 
+// for testing purposes
 async function queryField(field) {
     const query = `SELECT time, ${field} FROM "plant_metrics" 
                    WHERE ${field} IS NOT NULL
