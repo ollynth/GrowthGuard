@@ -1,9 +1,8 @@
-// src/pages/Dashboard.js
 import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Card from '../components/Card';
 import Chart from '../components/Chart';
-import { fetchLatestData, fetchDailyData, fetchSpecificData } from '../services/api';
+import { fetchLatestData, fetchDailyData } from '../services/api';
 import './dashboard.css';
 
 const Dashboard = () => {
@@ -21,9 +20,14 @@ const Dashboard = () => {
                 // Fetch latest data
                 const latest = await fetchLatestData();
                 setLatestData(latest);
-                console.log('Latest Data:', latest);
+                setLoading(false);
+            } catch (error) {
+                console.error('Error fetching latest data:', error);
+                setLoading(false);
+            }
 
-                // // Fetch daily data for each field
+            try {               
+                // Fetch daily data for each field
                 const tempData = await fetchDailyData('temperature');
                 const humidityData = await fetchDailyData('humidity');
                 const soilMoistureData = await fetchDailyData('soil_moisture');
@@ -35,14 +39,14 @@ const Dashboard = () => {
                 });
                 setLoading(false);
             } catch (error) {
-                console.error('Error fetching data:', error);
+                console.error('Error fetching daily data:', error);
                 setLoading(false);
             }
         };
 
         fetchData();
 
-        // Polling: Fetch data every 15-25 minutes
+        // Polling: Fetch data every 15 minutes
         const interval = setInterval(fetchData, 15 * 60 * 1000); // 15 minutes
         return () => clearInterval(interval); // Cleanup interval on unmount
     }, []);
@@ -57,8 +61,8 @@ const Dashboard = () => {
             <div className="data-container">
                 {/* Current Status */}
                 <h2 className="label">Latest Detection</h2>
-                <div className="card-grid">                
-                    <Card title="Date & Time" value={`${latestData?.time}`} icon="📆" />
+                <div className="card-grid">
+                    <Card title="Date & Time" value={`${latestData?.time}`} icon="📅" />
                     <Card title="Temperature" value={`${latestData?.temperature || 0}°C`} icon="🌡️" />
                     <Card title="Humidity" value={`${latestData?.humidity || 0}%`} icon="💧" />
                     <Card title="Soil Moisture" value={`${latestData?.soil_moisture || 0}%`} icon="🌱" />
@@ -67,11 +71,6 @@ const Dashboard = () => {
                 {/* Analytics */}
                 <div className="charts-container">
                     <h2 className="label">Analytics</h2>
-                    <Chart data={dailyData.temperature} title="Average Temperature (°C)"
-                        xField="date"
-                        yField="value"
-                        color="#FF4500" // Red
-                        />
                     <Chart data={dailyData.temperature} title="Daily Temperature" />
                     <Chart data={dailyData.humidity} title="Daily Humidity" />
                     <Chart data={dailyData.soilMoisture} title="Daily Soil Moisture" />

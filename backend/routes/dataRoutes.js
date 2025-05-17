@@ -49,30 +49,4 @@ router.get('/temperature', async (req, res) => {
     }
 });
 
-// GET /data/humidity
-router.get('/humidity', async (req, res) => {
-    try {
-        const data = await queryField('humidity');
-        res.json(data);
-    } catch (error) {
-        console.error('Error fetching humidity data:', error);
-        res.status(500).json({ error: 'Failed to fetch humidity data' });
-    }
-});
-
-// GET /data/soil_moisture
-router.get('/soil_moisture', async (req, res) => {
-    try {
-        const data = await queryField('soil_moisture');
-        res.json(data);
-    } catch (error) {
-        console.error('Error fetching soil moisture data:', error);
-        res.status(500).json({ error: 'Failed to fetch soil moisture data' });
-    }
-});
-
-
-
-
-
 export default router;

@@ -20,9 +20,46 @@ export const fetchLatestData = async () => {
 };
 
 export const fetchDailyData = async (field) => {
-    const response = await axios.get(`${API_BASE_URL}daily/${field}`);
-    return response.data;
+    try {
+        const response = await axios.get(`${API_BASE_URL}daily/${field}`);
+        const data = response.data;
+
+        // Transform the data to daily averages
+        const transformedData = calculateDailyAverages(data, field);
+
+        return transformedData;
+    } catch (error) {
+        console.error(`Error fetching daily ${field} data:`, error.message);
+        throw error;
+    }
 };
+
+// Helper function to calculate daily averages
+function calculateDailyAverages(data, field) {
+    const dailyAverages = {};
+
+    // Group data by date and calculate averages
+    data.forEach((item) => {
+        const date = new Date(item.time).toLocaleDateString(); // Get the date part
+        if (!dailyAverages[date]) {
+            dailyAverages[date] = {
+                date,
+                sum: 0,
+                count: 0,
+            };
+        }
+        dailyAverages[date].sum += item[field];
+        dailyAverages[date].count++;
+    });
+
+    // Calculate averages and format the result
+    const result = Object.values(dailyAverages).map((entry) => ({
+        date: entry.date,
+        value: entry.sum / entry.count, // Average value
+    }));
+
+    return result;
+}
 
 // Helper function to format the timestamp
 function formatDate(timestamp) {
@@ -30,13 +67,12 @@ function formatDate(timestamp) {
 
     // Format options for readability
     const options = {
-        weekday: 'long', // e.g., "Saturday"
-        year: 'numeric', // e.g., "2025"
-        month: 'long',   // e.g., "May"
-        day: 'numeric',  // e.g., "10"
-        hour: '2-digit', // e.g., "08"
-        minute: '2-digit', // e.g., "00"
-        timeZoneName: 'short', // e.g., "GMT+7"
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZoneName: 'short',
     };
 
     // Use the user's local timezone
