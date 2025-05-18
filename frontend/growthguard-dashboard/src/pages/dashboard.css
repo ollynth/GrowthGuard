@@ -1,0 +1,122 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #F5ECD5; 
+    color: #6b7280; 
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.data-container {
+    padding: 1rem;
+}
+
+.label {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #374151; /* Dark gray text */
+}
+
+.card-grid , .chart-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two columns by default */
+    gap: 1rem;
+}
+
+.status-card {
+    margin-bottom: 1rem;
+}
+
+.chart-container {
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column; 
+  gap: 1.5rem; 
+  align-content: center;
+}
+
+.chart-title {
+  margin: 0; 
+  font-size: 1rem;
+  font-weight: bold;
+  color: #374151;
+}
+
+.view-toggle {
+    margin-bottom: 1rem;
+}
+
+.view-toggle label {
+    margin-right: 1rem;
+}
+
+.charts-container {
+    width: 100%;
+    height: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+    gap: 1.6rem;
+}
+
+@media (min-width: 768px) {
+    .chart-container {
+        width: 400px; /* Fixed width for larger screens */
+        height: 250px;
+    }
+}
+
+
+@media (max-width: 768px) {
+  .charts-container {
+    grid-template-columns: 1fr; /* Single column on smaller screens */
+  }
+}
+
+/* Tablet Layout (e.g., iPad) */
+@media (max-width: 768px) {
+    .card-grid {
+        grid-template-columns: 1fr; /* Single column for cards */
+    }
+
+    .charts-container {
+        flex-direction: column; /* Stack charts vertically */
+    }
+
+    .view-toggle input[type="radio"] {
+    transform: scale(1.5); /* Larger radio buttons */
+}
+}
+
+/* Mobile Layout (e.g., Phones) */
+@media (max-width: 480px) {
+    .label {
+        font-size: 1rem; /* Smaller font size for labels */
+    }
+
+    .card-grid {
+        grid-template-columns: 1fr; /* Single column for cards */
+    }
+
+    .charts-container {
+        flex-direction: column; /* Stack charts vertically */
+    }
+
+    .chart-container {
+        width: 100%; /* Full width for charts */
+    }
+
+    .view-toggle {
+        flex-direction: column; /* Stack radio buttons vertically */
+    }
+
+    .view-toggle label {
+        margin-bottom: 0.5rem; /* Add spacing between radio buttons */
+    }
+}

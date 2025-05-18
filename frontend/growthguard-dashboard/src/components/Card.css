@@ -1,0 +1,33 @@
+/* src/components/Card.css */
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border: 1px solid #e2e8f0; /* Light gray border */
+  border-radius: 4px;
+  background-color: #FAF1E6;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.card__title {
+  font-size: 14px;
+  color: #6b7280; /* Gray text for title */
+  margin-bottom: 8px;
+}
+
+.card__value {
+  font-size: 24px;
+  font-weight: bold;
+  color: #374151; /* Darker text for value */
+}
+
+.card__icon {
+  font-size: 24px;
+  color: #ff4500; /* Example color for icon (you can adjust) */
+}
+
+.card__icon-right {
+  font-size: 24px;
+  color: #22c55e; /* Example color for right-side icon (you can adjust) */
+}

@@ -1,0 +1,23 @@
+/* src/components/Header.css */
+.header {
+  display: flex; 
+  align-items: center;
+  justify-content: flex-start; 
+  padding: 1rem; 
+  background-color: #626F47;
+  color: #F5ECD5; 
+  font-family: Arial, sans-serif;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+}
+
+.header__logo {
+  width: 84px; 
+  height: auto; 
+  margin-right: 1rem; /* Add spacing between the logo and the title */
+}
+
+.header__title {
+  margin: 0; 
+  font-size: 1.5rem; 
+  font-weight: bold; 
+}

@@ -8,7 +8,7 @@ if (result.error) {
     process.exit(1);
 }
 
-const port = result.parsed.PORT || 3000;
+const port = result.parsed.PORT || 5000;
 
 // Start the server
 app.listen(port, () => {
