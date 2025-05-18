@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllData, queryFieldLatest, queryFieldDaily, queryField } from '../controllers/dataControllers.js';
+import { getAllData, queryFieldLatest, queryFieldDaily, queryField, queryFieldWeekly } from '../controllers/dataControllers.js';
 
 const router = express.Router();
 
@@ -27,13 +27,24 @@ router.get('/latest', async (req, res) => {
 
 //TODO : implement daily data fetching
 // GET /data/daily/:field
+router.get('/weekly/:field', async (req, res) => {
+    const { field } = req.params;
+    try {
+        const data = await queryFieldWeekly(field);
+        res.json(data);
+    } catch (error) {
+        console.error(`Error fetching daily data for field ${field}:`, error.message);
+        res.status(404).json({ error: error.message });
+    }
+});
+
 router.get('/daily/:field', async (req, res) => {
     const { field } = req.params;
     try {
         const data = await queryFieldDaily(field);
         res.json(data);
     } catch (error) {
-        console.error(`Error fetching daily data for field ${field}:`, error.message);
+        console.error(`Error fetching hourly data for field ${field}:`, error.message);
         res.status(404).json({ error: error.message });
     }
 });

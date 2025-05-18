@@ -47,6 +47,33 @@ async function queryFieldLatest() {
 }
 
 // Helper function to query all data from a specific field -- for DAILY statistics
+async function queryFieldWeekly(field) {
+    const query = `
+        SELECT time, ${field} 
+        FROM "plant_metrics" 
+        WHERE time >= now() - interval '7 day' 
+          AND ${field} IS NOT NULL 
+          AND "device" IN ('ESP32') 
+          AND "SSID" = '${ssid}' 
+        ORDER BY time ASC
+    `;
+    const result = [];
+    try {
+        const rows = await influx.query(query, database);
+        for await (const row of rows) {
+            result.push(row);
+        }
+        // If no data is returned, throw an error
+        if (result.length === 0) {
+            throw new Error(`No weekly data found for field: ${field}`);
+        }
+        return result;
+    } catch (error) {
+        console.error(`Error fetching weekly data for field ${field}:`, error.message || error);
+        throw error; // Re-throw the error to be handled by the caller
+    }
+}
+
 async function queryFieldDaily(field) {
     const query = `
         SELECT time, ${field} 
@@ -69,11 +96,10 @@ async function queryFieldDaily(field) {
         }
         return result;
     } catch (error) {
-        console.error(`Error fetching daily data for field ${field}:`, error.message || error);
+        console.error(`Error fetching aily data for field ${field}:`, error.message || error);
         throw error; // Re-throw the error to be handled by the caller
     }
 }
-
 // for testing purposes
 async function queryField(field) {
     const query = `SELECT time, ${field} FROM "plant_metrics" 
@@ -90,4 +116,10 @@ async function queryField(field) {
     return result;
 }
 
-export { getAllData, queryFieldLatest, queryFieldDaily, queryField };
+export {
+    getAllData,
+    queryFieldLatest,
+    queryFieldDaily,
+    queryFieldWeekly,
+    queryField
+};

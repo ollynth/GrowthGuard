@@ -19,13 +19,11 @@ export const fetchLatestData = async () => {
     }
 };
 
-export const fetchDailyData = async (field) => {
+export const fetchWeeklyData = async (field) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}daily/${field}`);
+        const response = await axios.get(`${API_BASE_URL}weekly/${field}`);
         const data = response.data;
-
-        // Transform the data to daily averages
-        const transformedData = calculateDailyAverages(data, field);
+        const transformedData = calculateWeeklyAverages(data, field);
 
         return transformedData;
     } catch (error) {
@@ -34,8 +32,22 @@ export const fetchDailyData = async (field) => {
     }
 };
 
-// Helper function to calculate daily averages
-function calculateDailyAverages(data, field) {
+export const fetchDailyData = async (field) => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}daily/${field}`);
+        const data = response.data;
+
+        const transformedData = calculateDailyAverages(data, field);
+
+        return transformedData;
+    } catch (error) {
+        console.error(`Error fetching hourly ${field} data:`, error.message);
+        throw error;
+    }
+};
+
+// Helper function to calculate daily averages fro weekly report
+function calculateWeeklyAverages(data, field) {
     const dailyAverages = {};
 
     // Group data by date and calculate averages
@@ -54,6 +66,34 @@ function calculateDailyAverages(data, field) {
 
     // Calculate averages and format the result
     const result = Object.values(dailyAverages).map((entry) => ({
+        date: entry.date,
+        value: entry.sum / entry.count, // Average value
+    }));
+
+    return result;
+}
+
+function calculateDailyAverages(data, field) {
+    const hourlyAverages = {};
+
+    // Group data by hour and calculate averages
+    data.forEach((item) => {
+        const date = new Date(item.time);
+        const hour = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:00`; // Format as YYYY-MM-DD HH:00
+
+        if (!hourlyAverages[hour]) {
+            hourlyAverages[hour] = {
+                date: hour,
+                sum: 0,
+                count: 0,
+            };
+        }
+        hourlyAverages[hour].sum += item[field];
+        hourlyAverages[hour].count++;
+    });
+
+    // Calculate averages and format the result
+    const result = Object.values(hourlyAverages).map((entry) => ({
         date: entry.date,
         value: entry.sum / entry.count, // Average value
     }));
